@@ -1,0 +1,17 @@
+{% extends 'base.html' %}
+{% block content %}
+<html>
+<head>
+    <title>Confirm Account Deletion</title>
+</head>
+<body>
+    <h1>Confirm Account Deletion</h1>
+    <p>Please enter your password to confirm the account deletion.</p>
+    
+    <form method="post">
+        <label for="password">Password:</label>
+        <input type="password" id="password" name="password" required>
+        <button type="submit" style="color: brown;">Confirm Deletion</button>
+    </form>
+</body>
+{% endblock %}

@@ -1,0 +1,89 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="d-flex justify-content mt-2">
+  <form method="POST" action="{{ url_for('logout') }}">
+    <button type="submit" class="btn btn-danger mx-2">Logout , Mr. {{ current_user.username|title }}!</button>
+    <a class="btn btn-primary mx-5" href="{{ url_for('view_cart') }}">View Cart</a>
+    <a class="btn btn-primary mx-5" href="{{ url_for('shopping_history') }}">Shoping Histroy</a>
+
+    <a class="btn btn-danger mx-5" href="{{ url_for('delete_account') }}">Delete Account , Mr. {{ current_user.username|title }}! </a>
+  </form>
+ 
+</div>
+
+<div class="container">
+  <h3 style="color: green;">Welcome, {{ user.username }}!</h3>
+  <p style="font-size: 1.2em;">Explore and shop for your favorite products.</p>
+</div>
+
+<div class="container" style="display: flex; justify-content: space-between; margin: 50px;">
+  <form method="POST" action="{{ url_for('user_dashboard_search') }}" class="mb-3">
+    <div class="input-group mb-3" style="width: 1100px;">
+    <div class="input-group">
+      <select class="form-control" name="search_type">
+        <option value="category">Search for Category</option>
+        <option value="product">Search for Product</option>
+        <option value="manufacture_date_after">Manufacture Date After</option>
+        <option value="manufacture_date_before">Manufacture Date Before</option>
+        <option value="expiry_date_after">Expiry Date After</option>
+        <option value="expiry_date_before">Expiry Date Before</option>
+        <option value="price_above">Price Above</option>
+        <option value="price_below">Price Below</option>
+    </select>
+      <input type="text" class="form-control" placeholder="Search" name="search_query">
+      <div class="input-group-append">
+        <button class="btn btn-primary" type="submit">Search</button>
+      </div>
+      </div>
+    </div>
+    <p>Search for Category,Product,Manufacture Date After & Before (yyyy-mm-dd),Expiry Date Before & After (yyyy-mm-dd),Price Above & Below </p>
+  </form>
+  
+</div>
+
+
+<h2 style="color:  rgb(69, 7, 128);">Available Categories</h2>
+<div class="category-container">
+  {% for category in categories %}
+    <div class="category-item">
+      <p class="category-name">{{ category.name }}</p>
+      <img src="{{ url_for('static', filename='uploads/' + os.path.basename(category.image)) }}" alt="{{ category.name }}" class="category-image">
+      <a href="{{ url_for('user_category_products', category_id=category.id) }}" class="btn category-button">View Products</a>
+    </div>
+  {% endfor %}
+</div>
+
+<h2 style="color:  rgb(13, 3, 148); margin-top: 50px;">Available Products</h2>
+<div class="product-container">
+  {% for product in products %}
+    <div class="product-item">
+      <p class="product-name">{{ product.name }}</p>
+      <img src="{{ url_for('static', filename='uploads/' + os.path.basename(product.image)) }}" alt="{{ product.name }}" class="product-image">
+      <p class="product-name" >Category :
+        {% for category in categories %}
+                            {% if category.id == product.category_id %}
+                                {{ category.name }}
+                            {% endif %}
+                        {% endfor %}
+      </p>
+      <p class="product-name">Price : {{ product.rate_per_unit }} INR</p>
+      <p class="product-name">Avalable : {{ product.stock_quantity }} </p>
+      <div class="button-container">
+        <a href="{{url_for('product_detail',product_id=product.id) }}" class="btn product-button" style="background-color: rgb(197, 197, 69);">Detail</a>
+        <form method="POST" action="{{ url_for('add_to_cart', product_id=product.id) }}" style="display: inline;">
+          <button type="submit" class="btn product-button" style="background-color: rgb(55, 107, 229);"> Cart</button>
+      </form>
+      <form method="POST" action="{{ url_for('buy', product_id=product.id) }}" style="display: inline;">
+        <button type="submit" class="btn product-button" style="background-color: rgb(69, 197, 127);"> Buy</button>
+    </form>
+        
+      </div>
+    </div>
+  {% endfor %}
+</div>
+
+
+
+
+{% endblock %}

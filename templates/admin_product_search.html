@@ -1,0 +1,95 @@
+{% extends 'base.html' %}
+{% block content %}
+
+<div style="text-align: center;">
+    <a class="btn btn-primary" href="{{ url_for('admin_dashboard') }}">Go to Dashboard</a>
+</div>
+<div class="container" style="margin: 50px;">
+  <form method="POST" action="{{ url_for('admin_dashboard_search') }}" class="mb-3">
+    <div class="input-group mb-3" style="width: 1100px;"> <!-- Adjust the width here -->
+        <select class="form-control" name="search_type">
+            <option value="category">Search for Category</option>
+            <option value="product">Search for Product</option>
+            <option value="manufacture_date_after">Manufacture Date After</option>
+            <option value="manufacture_date_before">Manufacture Date Before</option>
+            <option value="expiry_date_after">Expiry Date After</option>
+            <option value="expiry_date_before">Expiry Date Before</option>
+            <option value="price_above">Price Above</option>
+            <option value="price_below">Price Below</option>
+        </select>
+        <input type="text" class="form-control" placeholder="Search for products, category, mfd, expd, price" name="search_query">
+        <div class="input-group-append">
+            <button class="btn btn-primary" type="submit">Search</button>
+        </div>
+    </div>
+    <p style="color: brown;">Search for Category,Product,Manufacture Date After & Before (yyyy-mm-dd),Expiry Date Before & After (yyyy-mm-dd),Price Above & Below </p>
+  </form>
+  </div>
+
+    <h2>Search Results</h2>
+    <!-- Display products -->
+    {% if products %}
+    <h3>Products</h3>
+    <table class="table">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Name</th>
+                <th>Category</th>
+                <th>Price Per Unit</th>
+                <th>No Of Item Avalable</th>
+                <th>Manufature & Expiary DAte</th>
+                <th>Picture</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for product in products %}
+            <tr>
+                <td>{{ product.id }}</td>
+                <td>{{ product.name }}</td>
+                <td>
+                    {% for category in categories1 %}
+                {% if category.id == product.category_id %}
+                    {{ category.name }}
+                {% endif %}
+            {% endfor %}
+                </td>
+                <td>{{ product.rate_per_unit }}</td>
+                <td>{{ product.stock_quantity }}</td>
+                <td>
+                    Manufacture {{ product.manufacture_date}}<br>
+                    Expiry {{ product.expiry_date}}
+                  </td>
+                <td>
+                    <img src="{{ url_for('static', filename='uploads/' + os.path.basename(product.image)) }}"
+                        alt="{{ product.name }}" width="100">
+                </td>
+                <td>
+            <div class="d-flex align-items-center">
+              <a href="{{ url_for('edit_product', product_id=product.id) }}" class="btn btn-primary mr-2">Edit</a>
+              <form action="{{ url_for('confirm_product_deletion', product_id=product.id) }}" method="get" style="display: inline;">
+                <button type="submit" class="btn btn-danger mr-2">Delete</button>
+              </form>
+              <form action="{{ url_for('add_quantity', product_id=product.id) }}" method="post" style="display: inline;">
+                <div class="input-group">
+                  <input type="number" class="form-control" name="quantity" placeholder="Quantity">
+                  <div class="input-group-append">
+                    <div class="input-group-text" style="padding-left: 10px; padding-right: 10px;"> 
+                      <button type="submit" class="btn btn-success">Add Quantity</button>
+                    </div>
+                  </div>
+                </div>
+              </form>
+            </div>
+          </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    {% endif %}
+
+{% if not categories and not products %}
+<p style="font-size: larger; color: red;">Give correct keyword for search</p>
+{% endif %}
+{% endblock %}

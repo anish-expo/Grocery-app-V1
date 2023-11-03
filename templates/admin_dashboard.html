@@ -1,0 +1,119 @@
+<!-- admindashbord.html-->
+{% extends 'base.html' %}
+
+{% block content %}
+<div style="text-align: center;">
+    <h1>Welcome to Admin Dashboard, Mr. {{ current_user.username|title }}!</h1>
+  </div>
+
+  <div class="d-flex justify-content-center mt-3">
+    <form method="POST" action="{{ url_for('logout') }}">
+        <button type="submit" class="btn btn-danger mx-auto">Logout , Mr. {{ current_user.username|title }}!</button>
+    </form>
+</div>
+<div class="container" style="display: flex; justify-content: space-between; margin: 50px;">
+  <form method="POST" action="{{ url_for('admin_dashboard_search') }}" class="mb-3">
+    <div class="input-group mb-3" style="width: 1100px;"> 
+        <select class="form-control" name="search_type">
+            <option value="category">Search for Category</option>
+            <option value="product">Search for Product</option>
+            <option value="manufacture_date_after">Manufacture Date After</option>
+            <option value="manufacture_date_before">Manufacture Date Before</option>
+            <option value="expiry_date_after">Expiry Date After</option>
+            <option value="expiry_date_before">Expiry Date Before</option>
+            <option value="price_above">Price Above</option>
+            <option value="price_below">Price Below</option>
+        </select>
+        <input type="text" class="form-control" placeholder="Search for products, category, mfd, expd, price" name="search_query">
+        <div class="input-group-append">
+            <button class="btn btn-primary" type="submit">Search</button>
+        </div>
+    </div>
+    <p style="color: brown;">Search for Category,Product,Manufacture Date After & Before (yyyy-mm-dd),Expiry Date Before & After (yyyy-mm-dd),Price Above & Below </p>
+  </form>
+</div>
+
+
+  
+
+
+    <div class="container" style="display: flex; justify-content: space-between; margin: 50px;">
+        <div>
+            <h2>Categories</h2>
+            <a class="btn btn-primary" href="{{ url_for('admin_categories') }}">Manage Categories</a>
+            <style>
+              .custom-table {
+                border-collapse: separate;
+                border-spacing: 20px; /* Adjust the spacing as needed */
+              }
+            </style>
+            
+            <table class="table custom-table">
+            
+                <thead>
+                  <tr>
+                   
+                    <th>Category Name</th>
+                    
+                  </tr>
+                </thead>
+                <tbody>
+                  {% for category in categories %}
+                    <tr>
+                     
+                      <td>{{ category.name }}</td>
+                      </tr>
+                  {% endfor %}
+                </tbody>
+              </table>
+        </div>
+
+        <div>
+            <h2>Products</h2>
+            <a class="btn btn-primary" href="{{ url_for('admin_products') }}">Manage Product</a>
+            <style>
+              .custom-table {
+                border-collapse: separate;
+                border-spacing: 10px; /* Adjust the spacing as needed */
+              }
+            </style>
+            
+            <table class="table custom-table">
+           
+                <thead>
+                  <tr>
+                    
+                    <th>Name</th>
+                    <th>Peoduct Category</th>
+                    <th>Price per unit</th>
+                    <th>No of Item</th>
+                    
+                  </tr>
+                </thead>
+                <tbody>
+                  {% for product in products %}
+                    <tr>
+                     
+                      <td>{{ product.name }}</td>
+                      <td>
+                        {% for category in categories %}
+                            {% if category.id == product.category_id %}
+                                {{ category.name }}
+                            {% endif %}
+                        {% endfor %}
+                    </td>
+                      <td>{{ product.rate_per_unit }}</td>
+                      <td>{{ product.stock_quantity}}</td>
+                      
+                    
+                    </tr>
+                  {% endfor %}
+                </tbody>
+              </table>
+        </div>
+    </div>
+
+      
+{% endblock %}
+
+

@@ -1,0 +1,64 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container">
+    <div style="text-align: center;">
+        <a class="btn btn-primary" href="{{ url_for('admin_dashboard') }}">Go to Dashboard</a>
+    </div>
+  <h2>Products for {{ category.name }}</h2>
+  <a href="{{ url_for('add_product') }}" class="btn btn-success">Add Product</a>
+  
+  <table class="table">
+    <thead>
+      <tr>
+        <th>ID</th>
+        <th>Name</th>
+       
+        <th>Manufature & Expiary DAte</th>
+        <th>Price Per Unit</th>
+        <th>No Of Item Avalable</th>
+        <th>Picture</th>
+        <th>Actions</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for product in products %}
+        <tr>
+          <td>{{ product.id }}</td>
+          <td>{{ product.name }}</td>
+         
+          <td>
+            Manufacture {{ product.manufacture_date}}<br>
+            Expiry {{ product.expiry_date}}
+          </td>
+          <td>{{ product.rate_per_unit }}</td>
+          <td>{{product.stock_quantity}}</td>
+          <td>
+            
+            <img src="{{ url_for('static', filename='uploads/' + os.path.basename(product.image)) }}" alt="{{ product.name }}" width="100">
+
+          </td>
+          <td>
+            <div class="d-flex align-items-center">
+              <a href="{{ url_for('edit_product', product_id=product.id) }}" class="btn btn-primary mr-2">Edit</a>
+              <form action="{{ url_for('confirm_product_deletion', product_id=product.id) }}" method="get" style="display: inline;">
+                <button type="submit" class="btn btn-danger mr-2">Delete</button>
+              </form>
+              <form action="{{ url_for('add_quantity', product_id=product.id) }}" method="post" style="display: inline;">
+                <div class="input-group">
+                  <input type="number" class="form-control" name="quantity" placeholder="Quantity">
+                  <div class="input-group-append">
+                    <div class="input-group-text" style="padding-left: 10px; padding-right: 10px;"> <!-- Add padding here -->
+                      <button type="submit" class="btn btn-success">Add Quantity</button>
+                    </div>
+                  </div>
+                </div>
+              </form>
+            </div>
+          </td>
+        </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+{% endblock %}

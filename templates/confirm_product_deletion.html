@@ -1,0 +1,31 @@
+{% extends 'base.html' %}
+
+{% block content %}
+  <h2>Delete Product</h2>
+  {% with messages = get_flashed_messages(with_categories=true) %}
+  {% if messages %}
+    <ul class="flashes">
+      {% for category, message in messages %}
+      <li class="{% if category == 'danger' %}danger{% elif category == 'success' %}success{% endif %}">
+        {{ message }}
+      </li>
+      {% endfor %}
+    </ul>
+  {% endif %}
+  {% endwith %}
+
+  <p>Are you sure you want to delete the product "{{ product.name }}"?</p>
+
+  <div class="d-flex justify-content-left mt-3">
+  <form method="post" action="{{ url_for('delete_product', product_id=product.id) }}">
+    <button type="submit" class="btn btn-danger mr-5">Delete</button>
+  </form>
+
+  <form method="get" action="{{ url_for('admin_products') }}">
+    <button type="submit" class="btn btn-primary">Cancel</button>
+  </form>
+</div>
+
+
+
+{% endblock %}

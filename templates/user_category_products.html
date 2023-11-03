@@ -1,0 +1,35 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container">
+    <div style="text-align: center;">
+        <a class="btn btn-primary" href="{{ url_for('user_dashboard') }}">Go to Dashboard</a>
+    </div>
+</div>
+
+<h2 style="color: rgb(13, 3, 148); margin-top: 50px;">Available Products for {{ category.name }}</h2>
+<div class="product-container">
+  {% if products %}
+    {% for product in products %}
+      <div class="product-item">
+        <p class="product-name">{{ product.name }}</p>
+        <img src="{{ url_for('static', filename='uploads/' + os.path.basename(product.image)) }}" alt="{{ product.name }}" class="product-image">
+        <p class="product-name">Price - {{ product.rate_per_unit }} INR</p>
+        <p class="product-name">Available: {{ product.stock_quantity }}</p>
+        <div class="button-container">
+          <a href="{{ url_for('product_detail', product_id=product.id) }}" class="btn product-button" style="background-color: rgb(197, 197, 69);">Detail</a>
+          <!--<a method="POST" href="{{ url_for('add_to_cart', product_id=product.id) }}" class="btn product-button" style="background-color: rgb(55, 107, 229);">Cart</a>-->
+          <form method="POST" action="{{ url_for('add_to_cart', product_id=product.id) }}" style="display: inline;">
+            <button type="submit" class="btn product-button" style="background-color: rgb(55, 107, 229);">Cart</button>
+          </form>
+          <form method="POST" action="{{ url_for('buy', product_id=product.id) }}" style="display: inline;">
+            <button type="submit" class="btn product-button" style="background-color: rgb(69, 197, 127);">Buy</button>
+          </form>
+        </div>
+      </div>
+    {% endfor %}
+  {% else %}
+    <p>No Products available</p>
+  {% endif %}
+</div>
+{% endblock %}

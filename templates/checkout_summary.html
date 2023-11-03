@@ -1,0 +1,26 @@
+{% extends 'base.html' %}
+
+{% block content %}
+{% with messages = get_flashed_messages(with_categories=true) %}
+  {% if messages %}
+    <ul class="flashes">
+      {% for category, message in messages %}
+      <li class="{% if category == 'danger' %}danger{% elif category == 'success' %}success{% endif %}">
+        {{ message }}
+      </li>
+     
+    
+      {% endfor %}
+    </ul>
+  {% endif %}
+{% endwith %}
+<div class="container">
+    <div style="text-align: center;">
+        <a class="btn btn-primary" href="{{ url_for('user_dashboard') }}">Go to Dashboard</a>
+    </div>
+
+    <h1 style="color: rgb(6, 80, 34);">Checkout Summary</h1>
+    <p style="color: blueviolet; font-size:large;">Total Amount: {{ total_amount }}</p>
+    <h3 style="color: rgb(155, 23, 102);">Thank you for your purchase!</h3>
+</div>
+{% endblock %}

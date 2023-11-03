@@ -1,0 +1,111 @@
+{% extends 'base.html' %}
+{% block content %}
+
+<div style="text-align: center;">
+    <a class="btn btn-primary" href="{{ url_for('admin_dashboard') }}">Go to Dashboard</a>
+</div>
+<div class="container" style="margin: 50px;">
+    <form method="POST" action="{{ url_for('admin_category_search') }}" class="mb-3">
+        <div class="input-group mb-3">
+            <input type="text" class="form-control" placeholder="Search for Category" name="search_query">
+            <div class="input-group-append">
+                <button class="btn btn-primary" type="submit">Search</button>
+            </div>
+        </div>
+    </form>
+  </div>
+
+    <h2>Search Results</h2>
+
+    {% if categories %}
+    <!-- Display categories -->
+    <h3>Categories</h3>
+    <table class="table">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Name</th>
+                <th>Image</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for category in categories %}
+            <tr>
+                <td>{{ category.id }}</td>
+                <td>{{ category.name }}</td>
+                <td>
+                    <img src="{{ url_for('static', filename='uploads/' + os.path.basename(category.image)) }}"
+                        alt="{{ category.name }}" width="100">
+                </td>
+                <td>
+                    <a href="{{ url_for('edit_category', category_id=category.id) }}" class="btn btn-primary">Edit</a>
+                    <form action="{{ url_for('confirm_category_deletion', category_id=category.id) }}" method="get"
+                        style="display: inline;">
+                        <button type="submit" class="btn btn-danger">Delete</button>
+                    </form>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    {% endif %}
+    
+    <!-- Display products only if there are products found -->
+    {% for category in categories %}
+    {% set category_products = products1|selectattr('category_id', 'equalto', category.id)|list %}
+    {% if category_products %}
+    <h3>Products for {{ category.name }}</h3>
+    <table class="table">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Name</th>
+                <th>Price Per Unit</th>
+                <th>No Of Item Available</th>
+                <th>Picture</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for product in category_products %}
+            <tr>
+                <td>{{ product.id }}</td>
+                <td>{{ product.name }}</td>
+                <td>{{ product.rate_per_unit }}</td>
+                <td>{{ product.stock_quantity }}</td>
+                <td>
+                    <img src="{{ url_for('static', filename='uploads/' + os.path.basename(product.image)) }}"
+                        alt="{{ product.name }}" width="100">
+                </td>
+                <td>
+                    <div class="d-flex align-items-center">
+                        <a href="{{ url_for('edit_product', product_id=product.id) }}" class="btn btn-primary mr-2">Edit</a>
+                        <form action="{{ url_for('confirm_product_deletion', product_id=product.id) }}" method="get" style="display: inline;">
+                          <button type="submit" class="btn btn-danger mr-2">Delete</button>
+                        </form>
+                        <form action="{{ url_for('add_quantity', product_id=product.id) }}" method="post" style="display: inline;">
+                          <div class="input-group">
+                            <input type="number" class="form-control" name="quantity" placeholder="Quantity">
+                            <div class="input-group-append">
+                              <div class="input-group-text" style="padding-left: 10px; padding-right: 10px;"> <!-- Add padding here -->
+                                <button type="submit" class="btn btn-success">Add Quantity</button>
+                              </div>
+                            </div>
+                          </div>
+                        </form>
+                      </div>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    {% endif %}
+    {% endfor %}
+    
+    
+   
+{% if not categories  %}
+<p style="font-size: larger; color: red;">Give correct keyword for search</p>
+{% endif %}
+{% endblock %}

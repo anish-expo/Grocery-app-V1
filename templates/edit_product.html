@@ -1,0 +1,57 @@
+{% extends 'base.html' %}
+
+{% block content %}
+  <h2>Edit Product</h2>
+  {% with messages = get_flashed_messages(with_categories=true) %}
+  {% if messages %}
+    <ul class="flashes">
+      {% for category, message in messages %}
+      <li style="color: brown;" class="{% if category == 'danger' %}danger{% elif category == 'success' %}success{% endif %}">
+        {{ message }}
+      </li>
+      {% endfor %}
+    </ul>
+  {% endif %}
+{% endwith %}
+  <form method="POST" enctype="multipart/form-data">
+    {{ form.hidden_tag() }} {# Include CSRF token #}
+    <div class="form-group">
+      <label for="name">Product Name</label>
+      <input type="text" class="form-control" id="name" name="name" value="{{ product.name }}" required>
+    </div>
+    <div class="form-group">
+      <label for="manufacture_date">Manufacture Date</label>
+      <input type="date" class="form-control" id="manufacture_date" name="manufacture_date" value="{{ product.manufacture_date }}">
+    </div>
+    <div class="form-group">
+      <label for="expiry_date">Expiry Date</label>
+      <input type="date" class="form-control" id="expiry_date" name="expiry_date" value="{{ product.expiry_date }}">
+    </div>
+    <div class="form-group">
+      <label for="rate_per_unit">Rate per Unit</label>
+      <input type="number" step="0.01" class="form-control" id="rate_per_unit" name="rate_per_unit" value="{{ product.rate_per_unit }}" required>
+    </div>
+    <div class="form-group">
+      <label for="stock_quantity">No of Item</label>
+      <input type="number" step="0.01" class="form-control" id="stock_quantity" name="stock_quantity" value="{{ stock_quantity }}" required>
+    </div>
+    <div class="form-group">
+      <label for="category_id">Category</label>
+      <select class="form-control" id="category_id" name="category_id" required>
+        {% for category in categories %}
+          <option value="{{ category.id }}" {% if product.category_id == category.id %}selected{% endif %}>{{ category.name }}</option>
+        {% endfor %}
+      </select>
+      
+    </div>
+    <div class="form-group">
+      <label for="image">Product Image</label>
+      <input type="file" class="form-control" id="image" name="image">
+      {% if product.image %}
+        <p>Current Image: <img src="{{ url_for('static', filename='uploads/' + os.path.basename(product.image)) }}" alt="{{ product.name }}" width="100"></p>
+      {% endif %}
+    </div>
+    
+    <button type="submit" class="btn btn-primary">Update Product</button>
+  </form>
+{% endblock %}

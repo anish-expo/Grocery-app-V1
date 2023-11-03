@@ -1,0 +1,37 @@
+<!-- product_detail.html -->
+
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container">
+    <div style="text-align:left;">
+        <a class="btn btn-primary" href="{{ url_for('user_dashboard') }}">Go to Dashboard</a>
+    </div>
+
+</div>
+<div class="product-item">
+    <h2 style="color: rgb(60, 18, 123);">Product Details</h2>
+  <h3 style="color: brown;">{{ product.name }}</h3>
+  <p style="color: rgb(6, 62, 5);" > Price: {{ product.rate_per_unit}}INR</p>
+  <p class="product-name" >Category :
+    {% for category in categories %}
+                        {% if category.id == product.category_id %}
+                            {{ category.name }}
+                        {% endif %}
+                    {% endfor %}
+  </p>
+  <p style="color: rgb(81, 8, 98);">Avalable : {{ product.stock_quantity }}</p>
+  <p style="color: rgb(81, 8, 98);">Manufacture Date : {{ product.manufacture_date }}</p>
+  <p style="color: rgb(81, 8, 98);">Expiry Date : {{ product.expiry_date }}</p>
+  <img src="{{ url_for('static', filename='uploads/' + os.path.basename(product.image)) }}" alt="{{ product.name }}" width="300">
+  <div class="button-container">
+    <form method="POST" action="{{ url_for('add_to_cart', product_id=product.id) }}" style="display: inline;">
+      <button type="submit" class="btn product-button" style="background-color: rgb(55, 107, 229);"> Cart</button>
+  </form>
+  <form method="POST" action="{{ url_for('buy', product_id=product.id) }}" style="display: inline;">
+    <button type="submit" class="btn product-button" style="background-color: rgb(69, 197, 127);"> Buy</button>
+</form>
+  </div>
+  
+</div>
+{% endblock %}

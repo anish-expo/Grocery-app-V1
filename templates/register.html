@@ -1,0 +1,28 @@
+<!-- templates/register.html -->
+{% extends 'base.html' %}
+
+{% block content %}
+<h2>Register</h2>
+
+{% with messages = get_flashed_messages(with_categories=true) %}
+  {% if messages %}
+    <ul class="flashes">
+      {% for category, message in messages %}
+      <li class="{% if category == 'danger' %}danger{% elif category == 'success' %}success{% endif %}">
+      {% endfor %}
+    </ul>
+  {% endif %}
+{% endwith %}
+
+<form method="POST">
+    <label>Username</label>
+    <input type="text" name="username" ><br>
+    <label>Password</label>
+    <input type="password" name="password" ><br>
+    <p>Password must be at least 5 characters long.<br>
+    Password must contain at least one capital letter.<br>
+      Password must contain at least one special character.
+    </p>
+    <button type="submit">Register</button>
+</form>
+{% endblock %}

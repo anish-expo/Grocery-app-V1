@@ -1,0 +1,67 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container">
+    <div style="text-align: center;">
+        <a class="btn btn-primary" href="{{ url_for('user_dashboard') }}">Go to Dashboard</a>
+    </div>
+
+</div>
+
+<div class="container">
+    <h2>{{current_user.username|upper }} your  Shoping Histroy</h2>
+    {% if shopping_history %}
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>Date</th>
+                    <th>Product</th>
+                    <th>Category</th>
+                    <th>Quantity</th>
+                    <th>Product Rate</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for item in shopping_history %}
+                    <tr>
+                        <td>{{ item.checkout_date }}</td>
+                        <td>{{ item.product_name }}</td>
+                        <td>{{ item.category_name }}</td>
+                        <td>{{ item.quantity }}</td>
+                        <td>{{ item.product_rate_per_unit }}</td>
+                        <td>
+                            <div class="button-container">
+                                <a href="{{ url_for('buy', product_id=item.product.id) }}" class="btn btn-danger">Buy Again</a>
+                                <a href="{{ url_for('product_detail', product_id=item.product.id) }}" class="btn btn-primary">Detail</a>
+                                
+                            </div>
+                        </td>
+                        
+                    </tr>
+                {% endfor %}
+            </tbody>
+           
+            
+            
+        </table>
+
+        <h2>Total Amounts by Checkout Date</h2>
+        <table>
+            <tr>
+                <th>Checkout Date</th>
+                <th>Total Amount</th>
+            </tr>
+            {% for date, total_amount in shopping_totals.items() %}
+            <tr>
+                <td>{{ date }}</td>
+                <td>{{ total_amount }}</td>
+            </tr>
+            {% endfor %}
+        </table>
+        
+    {% else %}
+        <p>Your Shoping List is empty.</p>
+    {% endif %}
+</div>
+{% endblock %}

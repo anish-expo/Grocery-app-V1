@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %} Grocery Store{% endblock %}</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+
+    <style>
+
+body {
+            background-image: url('/static/'); /* "C:\Users\ANISH\Desktop\grocery\static\background.jpg" */
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
+            margin: 0; /* Remove default body margin */
+            padding: 0; /* Remove default body padding */
+        }
+
+
+        .btn-custom {
+            background-color: green !important;
+            color: white !important;
+        }
+        .btn-custom1 {
+            background-color: rgb(18, 124, 112) !important;
+            color: white !important;
+        }
+        /* Define a CSS class for the category container */
+  .category-container {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr); /* Adjust the number of columns as needed */
+    gap: 5px; /* Adjust the gap between items as needed */
+  }
+
+   /* Style each individual category item */
+   .category-item {
+    text-align: center;
+    border: 0px solid #ccc;
+    padding: 10px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+  /* Style the category name */
+  .category-name {
+    font-weight: bold;
+    color: rgb(192, 25, 158);
+  }
+ /* Style the image */
+ .category-image {
+    max-width: 150px; /* Adjust the maximum width as needed */
+    height: 100px; /* Maintain aspect ratio */
+  }
+  /* Style the button */
+  .category-button {
+    margin-top: 10px; /* Add margin to create space between the image and button */
+    background-color: rgb(18, 124, 112) !important;
+    color: white !important;
+  }
+
+  .product-container {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr); /* Adjust the number of columns as needed */
+    gap: 5px; /* Adjust the gap between items as needed */
+  }
+
+
+  .product-item {
+    text-align: center;
+    border: 0px solid #ccc;
+    padding: 10px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+  /* Style the category name */
+  .product-name {
+    margin: 0px;
+    font-weight: bold;
+    color: rgb(192, 25, 158);
+  }
+ /* Style the image */
+ .product-image {
+    max-width: 150px; /* Adjust the maximum width as needed */
+    height: 100px; /* Maintain aspect ratio */
+  }
+  
+    .button-container {
+    display: flex;
+    justify-content: space-between; /* Adjust as needed (e.g., space-around, space-evenly) */
+  }
+
+  .product-button {
+    margin-top: 0px; /* Add margin to create space between the image and button */
+    margin-right: 10px;
+    
+    color: rgb(0, 0, 0) !important;
+  }
+
+  /* Define the styles for the footer */
+.footer {
+    background-color: #333; /* Set your preferred background color */
+    color: #fff; /* Set the text color to white or your preferred color */
+    padding: 20px; /* Add some padding to the footer */
+    position: fixed; /* Fix the footer to the bottom */
+    left: 0;
+    bottom: 0;
+    width: 100%;
+}
+
+/* Add some space to the bottom of the content so it's not hidden behind the footer */
+.body-content {
+    margin-bottom: 60px; /* Adjust this margin to match the height of your footer */
+}
+
+    </style>
+    <!-- Add any other CSS or JS files you need here -->
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+        <a class="navbar-brand" href="/">Grocery Store</a>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav ml-auto align-items-center">
+                <li class="nav-item {% if request.path == '/' %}active{% endif %}">
+                    <a class="nav-link" href="/">Home</a>
+                </li>
+                <li class="nav-item {% if request.path == url_for('user_login') %}active{% endif %}">
+                    <a class="nav-link" href="{{ url_for('user_login') }}">User Login</a>
+                </li>
+                <li class="nav-item {% if request.path == url_for('admin_login') %}active{% endif %}">
+                    <a class="nav-link" href="{{ url_for('admin_login') }}">Admin Login</a>
+                </li>
+                <li class="nav-item {% if request.path == url_for('register') %}active{% endif %}">
+                    <a class="nav-link" href="{{ url_for('register') }}">Create Account</a>
+                </li>
+            </ul>
+        </div>
+    </nav>
+</body>
+
+    
+ 
+    
+    <div class="container mt-4">
+        {% block content %}
+        {% endblock %}
+    </div>
+    
+    <footer >
+        &copy; {{ current_year }} My Grocery Store. All rights reserved.
+    </footer>
+    
+
+
+</body>
+</html>

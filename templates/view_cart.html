@@ -1,0 +1,66 @@
+{% extends 'base.html' %}
+
+
+
+{% block content %}
+
+
+
+<div class="container">
+    <div style="text-align: center;">
+        <a class="btn btn-primary" href="{{ url_for('user_dashboard') }}">Go to Dashboard</a>
+    </div>
+
+</div>
+<div class="container">
+    <h2>{{current_user.username|upper }} your Cart</h2>
+    {% if cart_items %}
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>Product</th>
+                    <th>Quantity</th>
+                    <th>Price</th>
+                    <th>Total</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for item_with_product in cart_items %}
+                    <tr>
+                        <td>{{ item_with_product.product.name }}</td>
+                        <td>{{ item_with_product.cart_item.quantity }}</td>
+                        <td>{{ item_with_product.product.rate_per_unit }}</td>
+                        <td>{{ item_with_product.item_total }}</td>
+                        <td>
+                            <div class="button-container">
+                                <a href="{{ url_for('remove_from_cart', cart_item_id=item_with_product.cart_item.id) }}" class="btn btn-danger">Remove</a>
+                                <a href="{{ url_for('product_detail', product_id=item_with_product.product.id) }}" class="btn btn-primary">Detail</a>
+                                <form method="POST" action="{{ url_for('add_quantity_to_cart', cart_item_id=item_with_product.cart_item.id) }}">
+                                    <button type="submit" class="btn btn-success">+</button>
+                                </form>
+                                <form method="POST" action="{{ url_for('remove_quantity_to_cart', cart_item_id=item_with_product.cart_item.id) }}">
+                                    <button type="submit" class="btn btn-success">-</button>
+                                </form>
+                            </div>
+                        </td>
+                        
+                    </tr>
+                {% endfor %}
+            </tbody>
+            <tfoot>
+                <tr>
+                    <td colspan="2"></td>
+                    <td style="color: rgb(5, 11, 130);"><strong>Total Amount:</strong></td>
+                    <td style="color: brown;"><strong>{{ total_amount }}</strong></td>
+                </tr>
+            </tfoot>
+            
+            
+        </table>
+        <a href="{{ url_for('checkout') }}" class="btn btn-success">Checkout</a>
+    {% else %}
+        <p>Your cart is empty.</p>
+    {% endif %}
+</div>
+{% endblock %}
